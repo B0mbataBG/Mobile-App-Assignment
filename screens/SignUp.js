@@ -29,7 +29,12 @@ class SignUpScreen extends Component{
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(this.state)
+        body: JSON.stringify({
+          "first_name": this.state.firstName,
+          "last_name": this.state.lastName,
+          "email": this.state.email,
+          "password": this.state.password
+        })
       })
       .then((response) => {
         if(response.status === 201){
@@ -44,7 +49,7 @@ class SignUpScreen extends Component{
       })
       .then((responseJson) => {
         console.log("User created ID:", responseJson);
-        this.props.navigation.navigate("Login");
+        this.props.navigation.navigate("SignIn");
       })
       .catch((error) => {
         console.log(error);
