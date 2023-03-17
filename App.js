@@ -1,89 +1,21 @@
-import React, { Component } from 'react';
-import { Alert } from 'react-native';
-import { TextInput } from 'react-native';
-import { FlatList, ActivityIndicator, Text, View } from 'react-native';
-import { Button, ScrollView } from 'react-native-web';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import SignUpScreen from './screens/SignUp';
+import HomeScreen from './screens/Home';
+import SignInScreen from './screens/SignIn';
 
-class SignUpScreen extends Component{
+const Stack = createNativeStackNavigator();
 
-
-  constructor(props){
-    super (props);
-    this.state ={
-      firstName: "",
-      lastName: "",
-      email: "",
-      signUp: ""
-    }
-  }
-
-    signUp = () =>{
-    //Validation here
-
-
-      return fetch ("http://localhost:3333/api/1.0.0/user", {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(this.state)
-      })
-      .then((response) => {
-        if(response.status === 201){
-          return response.json()
-        }
-        else if(response.status === 400){
-          throw 'Failed validation';
-        }
-        else {
-          throw 'Something went wrong';
-        }
-      })
-      .then((responseJson) => {
-        console.log("User created ID:", responseJson);
-        this.props.navigation.navigate("Login");
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-
-    }
-
-      render(){
-        return(
-          <ScrollView>
-            <TextInput
-              placeholder='Enter your first name'
-              onChangeText={(firstName) => this.setState({firstName})}
-              value={this.state.firstName}
-              style={{padding:5, borderWidth:1, margin:5}}
-            />
-            <TextInput
-              placeholder='Enter your last name'
-              onChangeText={(lastName) => this.setState({lastName})}
-              value={this.state.lastName}
-              style={{padding:5, borderWidth:1, margin:5}}
-            />
-            <TextInput
-              placeholder='Enter your first email'
-              onChangeText={(email) => this.setState({email})}
-              value={this.state.email}
-              style={{padding:5, borderWidth:1, margin:5}}
-            />
-            <TextInput
-              placeholder='Enter your first password'
-              onChangeText={(password) => this.setState({password})}
-              value={this.state.password}
-              style={{padding:5, borderWidth:1, margin:5}}
-            />
-            <Button 
-              title="Create an account"
-              onPress={() => this.signUp()}
-            />
-          </ScrollView>
-        )
-      }
-    }
-
-export default SignUpScreen;
+export default function App(){
+  return(
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Home'>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
+        <Stack.Screen name="SignIn" component={SignInScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
