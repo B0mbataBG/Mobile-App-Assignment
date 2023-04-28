@@ -1,32 +1,56 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LogoutButton from '../Components/LogoutButton';
-
+import ChatList from '../components/ChatList';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#f0f0f0',
+  },
+  chatList: {
+    flex: 1,
+  },
+  chatItem: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  chatTitle: {
+    fontSize: 18,
   },
   button: {
     marginTop: 10,
   },
+  createChatContainer: {
+    padding: 16,
+  },
+  createChatInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 8,
+  },
 });
-
-
 
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoggedIn: false,
+      chatTitle: '',
     };
   }
 
-  // Check if the user is logged in when the component mounts
   componentDidMount() {
     AsyncStorage.getItem('sessionId')
       .then((token) => {
@@ -39,9 +63,12 @@ class HomeScreen extends React.Component {
       });
   }
 
-  // Callback function to update the authentication status when the user logs out
   handleLogout = () => {
     this.setState({ isLoggedIn: false });
+  };
+
+  handleCreateChat = (chatTitle) => {
+    this.chatListRef.createChat(chatTitle);
   };
 
   render() {
@@ -50,7 +77,26 @@ class HomeScreen extends React.Component {
         <Text style={{ fontSize: 24 }}>What's That</Text>
 
         {this.state.isLoggedIn ? (
-          <LogoutButton onLogout={this.handleLogout} />
+          <>
+            <ChatList
+              ref={(ref) => {
+                this.chatListRef = ref;
+              }}
+            />
+            <View style={styles.createChatContainer}>
+              <TextInput
+                style={styles.createChatInput}
+                onChangeText={(text) => this.setState({ chatTitle: text })}
+                value={this.state.chatTitle}
+                placeholder="Enter chat title"
+              />
+              <Button
+                title="Create Chat"
+                onPress={() => this.handleCreateChat(this.state.chatTitle)}
+              />
+            </View>
+            <LogoutButton onLogout={this.handleLogout} />
+          </>
         ) : (
           <>
             <View style={styles.button}>
@@ -72,6 +118,5 @@ class HomeScreen extends React.Component {
     );
   }
 }
-
 
 export default HomeScreen;

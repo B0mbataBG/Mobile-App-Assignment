@@ -53,6 +53,13 @@ class IndexScreen extends React.Component {
           <LogoutButton onLogout={this.handleLogout} />
         ) : (
           <>
+          <View style={styles.button}>
+              <Button
+                title="Sign In"
+                onPress={() => this.props.navigation.navigate('SignIn')}
+              />
+            </View>
+
             <View style={styles.button}>
               <Button
                 title="Sign Up"
@@ -60,12 +67,6 @@ class IndexScreen extends React.Component {
               />
             </View>
 
-            <View style={styles.button}>
-              <Button
-                title="Sign In"
-                onPress={() => this.props.navigation.navigate('SignIn')}
-              />
-            </View>
           </>
         )}
       </View>
