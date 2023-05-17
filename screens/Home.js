@@ -1,23 +1,13 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LogoutButton from '../Components/LogoutButton';
-import ChatList from '../components/ChatList';
+import ChatList from '../Components/ChatList';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f0f0f0',
-  },
-  chatList: {
-    flex: 1,
   },
   chatItem: {
     padding: 16,
@@ -76,12 +66,13 @@ class HomeScreen extends React.Component {
       <View style={styles.container}>
         <Text style={{ fontSize: 24 }}>What's That</Text>
 
-        {this.state.isLoggedIn ? (
+        {this.state.isLoggedIn && this.props.navigation ? (
           <>
             <ChatList
               ref={(ref) => {
                 this.chatListRef = ref;
               }}
+              navigation={this.props.navigation}
             />
             <View style={styles.createChatContainer}>
               <TextInput

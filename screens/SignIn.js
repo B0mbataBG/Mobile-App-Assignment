@@ -58,7 +58,14 @@ class SignInScreen extends Component {
       AsyncStorage.setItem('sessionId', responseJson.token)
         .then(() => {
           console.log('Token stored successfully');
-          this.props.navigation.navigate("Home");
+          AsyncStorage.setItem('userId', responseJson.id.toString())
+                .then(() => {
+                    console.log('UserId stored successfully');
+                    this.props.navigation.navigate("Home");
+                })
+                .catch((error) => {
+                    console.log('Failed to store userId:', error);
+                });
         })
         .catch((error) => {
           console.log('Failed to store token:', error);
@@ -69,7 +76,6 @@ class SignInScreen extends Component {
     })
   }
 
-  // Helper function to validate email address
   validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -89,6 +95,7 @@ class SignInScreen extends Component {
           onChangeText={(password) => this.setState({ password })}
           value={this.state.password}
           style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          secureTextEntry
         />
         <Button
           title="Sign In"

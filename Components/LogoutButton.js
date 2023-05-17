@@ -8,6 +8,9 @@ const LogoutButton = ({ onLogout }) => {
     await AsyncStorage.removeItem('sessionId');
     // Call the onLogout prop to update the authentication status in the parent component
     onLogout();
+
+    navigation.navigate('IndexScreen');
+
   };
 
   return <Button title="Logout" onPress={handleLogout} />;

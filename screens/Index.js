@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LogoutButton from '../Components/LogoutButton';
-
+import HomeButton from '../Components/HomeButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,7 +50,11 @@ class IndexScreen extends React.Component {
         <Text style={{ fontSize: 24 }}>What's That</Text>
 
         {this.state.isLoggedIn ? (
-          <LogoutButton onLogout={this.handleLogout} />
+          <View>
+            <HomeButton />    
+            <LogoutButton onLogout={this.handleLogout} />
+          </View>
+          
         ) : (
           <>
           <View style={styles.button}>

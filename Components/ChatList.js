@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
@@ -38,6 +38,7 @@ class ChatList extends React.Component {
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data);  
         this.setState({ chats: data });
       } else {
         console.log('Error fetching chats:', response.status);
@@ -58,16 +59,14 @@ class ChatList extends React.Component {
         },
         body: JSON.stringify({
           name: chatTitle,
-          // Add other necessary fields here, based on your API documentation
         }),
       });
 
       if (response.status === 201) {
         const data = await response.json();
         console.log('Chat created successfully:', data);
-        this.setState((prevState) => ({
-          chats: [...prevState.chats, data],
-        }));
+        this.fetchChats();
+
       } else {
         console.log('Error creating chat:', response.status);
       }
@@ -76,11 +75,19 @@ class ChatList extends React.Component {
     }
   };
 
+
+  handleChatPress = (chatId) => {
+    this.props.navigation.navigate('ChatDetails', { chatId: chatId });
+  };
+  
   renderItem = ({ item }) => (
-    <View style={styles.chatItem}>
-      <Text style={styles.chatTitle}>{item.name}</Text>
-    </View>
-  );
+    <TouchableOpacity onPress={() => this.handleChatPress(item.chat_id)}>
+      <View style={styles.chatItem}>
+        <Text style={styles.chatTitle}>{item.name}</Text>
+      </View>
+    </TouchableOpacity>
+  )
+  
 
   render() {
     return (
@@ -92,6 +99,11 @@ class ChatList extends React.Component {
       />
     );
   }
+
+  
 }
 
 export default ChatList;
+
+
+
